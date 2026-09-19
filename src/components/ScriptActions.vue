@@ -2,7 +2,6 @@
 import {ElMessage} from "element-plus";
 
 const props = defineProps<{
-  command: string //单条命令
   script: string //运行bat文件
   fileName: string
 }>()
@@ -29,7 +28,7 @@ const copyScript= async (content: string)=>{
 
 <template>
 <el-button @click="downloadBat(script)">点击下载ffmepg命令.bat文件(点击运行)</el-button>
-  <el-button @click="copyScript(command)">点击复制ffmepg命令(复制脚本内容)</el-button>
+  <el-button @click="copyScript(script)">点击复制ffmepg命令(复制脚本内容)</el-button>
 </template>
 
 <style scoped>

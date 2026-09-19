@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { FormState } from '@/types/form'
+import type { CompressForm } from '@/types/form'
 
-const form = defineModel<FormState>({ required: true })
+const form = defineModel<CompressForm>({ required: true })
 </script>
 
 <template>

@@ -1,4 +1,12 @@
-export interface FormState{
+export interface CompressForm{
+
+
+    /**
+     * 操作类型
+     *
+     * 压缩视频
+     */
+    operation: 'compress'
     /**
      * 视频编码器
      * 对应 FFmpeg 参数：-c:v
@@ -129,3 +137,15 @@ export interface FormState{
      */
     overwrite: boolean
 }
+
+// 合并表单
+export interface MergeForm {
+    operation: 'merge'
+    inputPattern: '*.mp4' | '*.mp3' | '*.ts' | '*.mkv'
+    outputName: string
+    outputDir: string
+    mode: 'copy' | 'reencode'   // 快速合并 / 重新编码
+}
+
+// 联合类型
+export type FormState = CompressForm | MergeForm

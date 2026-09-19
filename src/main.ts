@@ -2,35 +2,13 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'
-import {buildBatFFMpegCommand} from "@/utils/BuildBatFFMpegCommand.ts";
+import {buildCompressBatCommand} from "@/utils/BuildCompressBatCommand.ts";
 import {buildBatScript} from "@/utils/BuildeBatScript.ts";
 import ElPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import {useScriptGenerator} from "@/composables/useScirptGenerator.ts";
 
-let ffmepgStr = buildBatFFMpegCommand({
-    codec: 'libx264',
-    crf: 23,
-    preset: 'medium',
-    resolution: 'source',
-    audioBitrate: '128k',
-    outputDir: 'compressed',
-    suffix: '_compressed',
-    skipExisting: true,
-    overwrite: true,
-})
 
-let ffmepgBat = buildBatScript({
-    codec: 'libx264',
-    crf: 23,
-    preset: 'medium',
-    resolution: '1080',
-    audioBitrate: '128k',
-    outputDir: 'compressed',
-    suffix: '_compressed',
-    skipExisting: true,
-    overwrite: true,
-})
 
 //控制台+alert验证
 // console.log(JSON.stringify(ffmepgStr))

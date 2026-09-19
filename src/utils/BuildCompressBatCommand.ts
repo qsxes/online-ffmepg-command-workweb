@@ -1,6 +1,7 @@
-import type { FormState } from '@/types/form'
+import type { CompressForm } from '@/types/form'
 
-export function buildBatFFMpegCommand(form: FormState): string {
+
+export function buildCompressBatCommand(form: CompressForm): string {
 
     //命令行选项
     const parts: string[] = ['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y']
@@ -30,3 +31,4 @@ export function buildBatFFMpegCommand(form: FormState): string {
 
     return parts.join(' ')
 }
+
