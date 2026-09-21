@@ -17,5 +17,5 @@ export function buildBatScript(form: FormState): string {
     } else if (form.operation === 'convert') {
         return buildConvertBatCommand(form)
     }
-
+    return "未知错误，文件名生成失败!"
 }
