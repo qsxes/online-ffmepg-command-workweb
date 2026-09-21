@@ -12,7 +12,7 @@ import Drawer from "@/components/Drawer.vue";
 import ConvertFormView from "@/components/ConvertForm.vue"
 import {buildConvertBatScript} from "@/utils/BuildConvertBatScript.ts";
 
-const operation = ref<'compress' | 'merge'>('compress')
+const operation = ref<'compress' | 'merge' |'convert'>('compress')
 
 // 两个独立表单
 const compressForm = reactive<CompressForm>({
@@ -68,7 +68,7 @@ const script = computed(() => {
   else if(operation.value === 'convert') {
     return buildConvertBatScript(convertForm)
   }
-
+  return ''
 })
 
 // 下载文件名
