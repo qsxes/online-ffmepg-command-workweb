@@ -45,9 +45,9 @@ const drawer = ref(false)
       </el-collapse-item>
     </el-collapse>
 
-    <h3>方式三：一键安装脚本（懒人）</h3>
-    <p>下载脚本，右键「以管理员身份运行」，自动安装 FFmpeg。</p>
-    <el-button type="primary">下载 install-ffmpeg.bat</el-button>
+<!--    <h3>方式三：一键安装脚本（懒人）</h3>-->
+<!--    <p>下载脚本，右键「以管理员身份运行」，自动安装 FFmpeg。</p>-->
+<!--    <el-button type="primary">下载 install-ffmpeg.bat</el-button>-->
 
     <h3>验证安装是否成功</h3>
     <p>打开 CMD，输入：</p>

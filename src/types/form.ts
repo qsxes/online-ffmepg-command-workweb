@@ -1,6 +1,4 @@
 export interface CompressForm{
-
-
     /**
      * 操作类型
      *
@@ -147,5 +145,143 @@ export interface MergeForm {
     mode: 'copy' | 'reencode'   // 快速合并 / 重新编码
 }
 
+// 格式转换表单
+export interface ConvertForm {
+    /**
+     * 操作类型
+     *
+     * 把视频/音频从一种容器格式转成另一种
+     * 比如 mp4 → mkv、mov → mp4、mp4 → mp3（只抽音频）
+     */
+    operation: 'convert'
+
+    /**
+     * 源文件格式（脚本遍历的输入文件）
+     * 对应 .bat 里的 for 循环通配符
+     *
+     * 默认 '*.mp4'，脚本只处理当前文件夹里的 .mp4
+     *
+     * 用户看到的：一个下拉框，「输入文件格式」
+     */
+    inputPattern: '*.mp4' | '*.mkv' | '*.mov' | '*.avi' | '*.webm' | '*.ts'
+
+
+    /**
+     * 目标格式（容器）
+     * 对应 FFmpeg：由输出文件扩展名决定，不用显式参数
+     *
+     * mp4  = 兼容性最好，网页、手机、剪辑软件都认，但只支持特定编码组合
+     * mkv  = 万能容器，几乎什么编码都能塞，但不适合网页直接播放
+     * mov  = 苹果生态，剪辑软件常用
+     * webm = 网页友好，配 VP9/Opus，开源
+     * avi  = 老格式，兼容旧设备，但编码支持有限
+     * mp3  = 只抽音频，视频轨丢弃
+     * wav  = 无损音频，体积大
+     *
+     * 用户看到的：一个下拉框，「视频格式」和「音频格式」分组显示
+     */
+    targetFormat: 'mp4' | 'mkv' | 'mov' | 'webm' | 'avi' | 'mp3' | 'wav'
+
+    /**
+     * 视频编码器
+     * 对应 FFmpeg 参数：-c:v
+     *
+     * copy      = 不重新编码，直接复制视频流（最快，体积不变）
+     *             只在目标容器兼容原编码时可用，否则会报错
+     * libx264   = H.264，兼容性最好
+     * libx265   = H.265，体积更小，老设备可能不支持
+     * libvpx-vp9 = VP9，配 webm 用，网页友好
+     *
+     * 当 targetFormat 是 mp3 / wav 时，此项无效（视频轨被丢弃）
+     *
+     * 用户看到的：一个下拉框，「不重新编码（最快）」+ 各编码器选项
+     */
+    videoCodec: 'copy' | 'libx264' | 'libx265' | 'libvpx-vp9'
+
+    /**
+     * 音频编码器
+     * 对应 FFmpeg 参数：-c:a
+     *
+     * copy       = 不重新编码，直接复制音频流（最快）
+     *              只在目标容器兼容原编码时可用
+     * aac        = 兼容性最好，mp4/mkv/mov 都认
+     * libmp3lame = MP3，老设备友好
+     * libopus    = Opus，配 webm 用，同码率音质最好
+     * pcm_s16le  = 无损 PCM，配 wav 用
+     *
+     * 用户看到的：一个下拉框
+     */
+    audioCodec: 'copy' | 'aac' | 'libmp3lame' | 'libopus' | 'pcm_s16le'
+
+    /**
+     * 音频码率
+     * 对应 FFmpeg 参数：-b:a
+     *
+     * 仅在 audioCodec 不是 copy 时生效
+     * wav（PCM）是无损格式，此参数无效
+     *
+     * 96k  = 体积小
+     * 128k = 默认，平衡
+     * 192k = 音质更好
+     * 320k = 接近 MP3 上限
+     *
+     * 用户看到的：一个下拉框，audioCodec = copy 或 wav 时置灰
+     */
+    audioBitrate: '96k' | '128k' | '192k' | '320k'
+
+    /**
+     * 输出目录名
+     * 对应 .bat 脚本里的 OUT 变量
+     *
+     * 默认 "converted"，压缩后的文件放在脚本目录下的 converted 文件夹里
+     * 脚本会自动创建这个目录，如果不存在
+     *
+     * 用户看到的：一个文本输入框，默认填 converted
+     */
+    outputDir: string
+
+    /**
+     * 输出文件名后缀
+     * 对应输出文件命名规则
+     *
+     * 默认 "_converted"
+     * 比如输入 a.mp4，转成 mkv → 输出 a_converted.mkv
+     *
+     * 留空则直接替换扩展名：a.mp4 → a.mkv
+     *
+     * 用户看到的：一个文本输入框，默认填 _converted
+     */
+    suffix: string
+
+    /**
+     * 是否覆盖输出文件
+     * 对应 FFmpeg 参数：-y
+     *
+     * true  = 输出文件已存在时直接覆盖，不询问
+     * false = 输出文件已存在时，FFmpeg 会卡在询问，脚本停住
+     *
+     * 批处理脚本里几乎必须为 true，否则遇到已存在文件会卡死
+     *
+     * 用户看到的：一个开关，默认开启
+     */
+    overwrite: boolean
+
+
+    /**
+     * 是否跳过已经存在文件
+     * true=跳过
+     * false=不跳过
+     */
+    skipExisting: boolean
+
+    /**
+     * 提取模式
+     *
+     * none  = 正常转换（视频 + 音频都保留）
+     * audio = 只提取音频（丢弃视频轨，加 -vn）
+     * video = 只提取视频（丢弃音频轨，加 -an）
+     */
+    extractMode: 'none' | 'audio' | 'video'
+}
 // 联合类型
-export type FormState = CompressForm | MergeForm
+export type FormState = CompressForm | MergeForm | ConvertForm

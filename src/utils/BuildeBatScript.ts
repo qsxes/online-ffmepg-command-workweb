@@ -1,6 +1,7 @@
 import type { FormState } from '@/types/form'
 import { buildCompressBatScript } from './BuildCompressBatScript'
 import { buildMergeBatScript } from './BuildMergeBatScript'
+import {buildConvertBatCommand} from "@/utils/BuildConvertBatCommand.ts";
 
 /**
  * 根据操作类型派发到对应的脚本生成器
@@ -11,6 +12,10 @@ import { buildMergeBatScript } from './BuildMergeBatScript'
 export function buildBatScript(form: FormState): string {
     if (form.operation === 'compress') {
         return buildCompressBatScript(form)
+    } else if (form.operation === 'merge') {
+        return buildMergeBatScript(form)
+    } else if (form.operation === 'convert') {
+        return buildConvertBatCommand(form)
     }
-    return buildMergeBatScript(form)
+
 }

@@ -1,38 +1,42 @@
-import type { CompressForm } from '@/types/form'
-import { buildCompressBatCommand } from '@/utils/BuildCompressBatCommand'
+import type { ConvertForm } from '@/types/form'
+import { buildConvertBatCommand } from '@/utils/BuildConvertBatCommand'
 
 /**
  * 根据用户配置生成 Windows 批处理脚本（.bat）
  *
- * @param form 用户配置的压缩表单
+ * @param form 用户配置的格式转换表单
  * @returns 完整的 .bat 文件内容字符串（使用 \r\n 换行）
  */
-export function buildCompressBatScript(form: CompressForm): string {
+export function buildConvertBatScript(form: ConvertForm): string {
     // 生成单条 ffmpeg 命令片段
-    const cmd = buildCompressBatCommand(form)
+    const cmd = buildConvertBatCommand(form)
+
+    const isAudioTarget = form.targetFormat === 'mp3' || form.targetFormat === 'wav'
+
+    const videoCodecLine = isAudioTarget ? '' : `echo   视频编码=${form.videoCodec}\n `
 
     // 把参数转成中文显示
-    const codecText = form.codec === 'libx264' ? 'H.264' : 'H.265'
-    const presetMap: Record<string, string> = {
-        ultrafast: '最快',
-        fast: '较快',
-        medium: '平衡',
-        slow: '最慢',
-    }
-    const presetText = presetMap[form.preset] ?? form.preset
-    const resolutionText = form.resolution === 'source' ? '保持原始' : `${form.resolution}p`
+    const formatText = form.targetFormat.toUpperCase()
+    const videoCodecText = form.videoCodec === 'copy' ? '不重新编码' : form.videoCodec
+    const audioCodecText = form.audioCodec === 'copy' ? '不重新编码' : form.audioCodec
     const skipText = form.skipExisting ? '是' : '否'
 
+    // 输出扩展名（比如 mp4 / mkv / mp3）
+    const outputExt = form.targetFormat
+
+    // ============================================================
+    // 循环体：两种形态，取决于 skipExisting
+    // ============================================================
 
     let loopBody: string
 
     if (form.skipExisting) {
-        loopBody = `  if exist "%OUT%\\%%~nF${form.suffix}.mp4" (
+        loopBody = `  if exist "%OUT%\\%%~nF${form.suffix}.${outputExt}" (
     echo [跳过] %%~nxF 已处理过
   ) else (
     echo [处理] %%~nxF
-  ${cmd}
-  if errorlevel 1 (
+    ${cmd}
+    if errorlevel 1 (
       echo [失败] %%~nxF
       echo %%~nxF>>"%ERR%"
     ) else (
@@ -41,13 +45,13 @@ export function buildCompressBatScript(form: CompressForm): string {
   )`
     } else {
         loopBody = `  echo [处理] %%~nxF
-    ${cmd}
-    if errorlevel 1 (
-      echo [失败] %%~nxF
-      echo %%~nxF>>"%ERR%"
-    ) else (
-      echo [完成] %%~nxF
-    )`
+  ${cmd}
+  if errorlevel 1 (
+    echo [失败] %%~nxF
+    echo %%~nxF>>"%ERR%"
+  ) else (
+    echo [完成] %%~nxF
+  )`
     }
 
     // ============================================================
@@ -59,7 +63,7 @@ chcp 65001 >nul
 setlocal
 
 REM ============================================
-REM  FFmpeg 批量视频压缩脚本
+REM  FFmpeg 批量格式转换脚本
 REM  由 FFmpeg 本地批处理工作流生成器 生成
 REM ============================================
 
@@ -87,20 +91,19 @@ if exist "%ERR%" del "%ERR%"
 REM 开始提示
 echo.
 echo ============================================
-echo   FFmpeg 批量压缩
+echo   FFmpeg 批量格式转换
 echo ============================================
-echo   编码器=${codecText}
-echo   画质=CRF ${form.crf}
-echo   速度=${presetText}
-echo   分辨率=${resolutionText}
-echo   音频=${form.audioBitrate}
+echo   输入格式=${form.inputPattern}
+echo   目标格式=${formatText}
+${videoCodecLine}echo   音频编码=${audioCodecText}
+echo   音频码率=${form.audioBitrate}
 echo   跳过已存在=${skipText}
 echo   输出目录=%OUT%
 echo ============================================
 echo.
 
 REM 遍历当前文件夹的所有 .mp4
-for %%F in ("%~dp0*.mp4") do (
+for %%F in ("%~dp0${form.inputPattern}") do (
 ${loopBody}
 )
 

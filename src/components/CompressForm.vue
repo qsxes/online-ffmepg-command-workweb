@@ -58,14 +58,25 @@ const form = defineModel<CompressForm>({ required: true })
       <el-input v-model="form.suffix" placeholder="_finished" />
     </el-form-item>
 
-    <!-- skipExisting: boolean 已有结果就跳过	不重复处理 -->
+    <!-- skipExisting: boolean -->
     <el-form-item label="跳过已存在">
       <el-switch v-model="form.skipExisting" />
+      <div class="hint">输出目录里已有同名文件时，跳过不处理。</div>
     </el-form-item>
 
-    <!-- overwrite: boolean 自动覆盖同名文件	不弹窗询问 -->
+    <!-- overwrite: boolean -->
     <el-form-item label="覆盖输出">
-      <el-switch v-model="form.overwrite" />
+      <el-switch
+          v-model="form.overwrite"
+          :disabled="form.skipExisting"
+      />
+      <div v-if="form.skipExisting" class="hint">
+        已开启「跳过已存在」，覆盖输出不会生效。
+        关闭「跳过已存在」后，此开关才起作用。
+      </div>
+      <div v-else class="hint">
+        FFmpeg 处理时，如果输出文件已存在，直接覆盖，不询问。
+      </div>
     </el-form-item>
   </el-form>
 </template>

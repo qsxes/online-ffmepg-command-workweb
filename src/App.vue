@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
-import type { CompressForm, MergeForm } from '@/types/form'
+import type {CompressForm, ConvertForm, MergeForm} from '@/types/form'
 import CompressFormView from '@/components/CompressForm.vue'
 import MergeFormView from '@/components/MergeForm.vue'
 import ScriptActions from '@/components/ScriptActions.vue'
@@ -9,6 +9,8 @@ import { buildCompressBatCommand } from '@/utils/BuildCompressBatCommand'
 import { buildCompressBatScript } from '@/utils/BuildCompressBatScript'
 import { buildMergeBatScript } from '@/utils/BuildMergeBatScript'
 import Drawer from "@/components/Drawer.vue";
+import ConvertFormView from "@/components/ConvertForm.vue"
+import {buildConvertBatScript} from "@/utils/BuildConvertBatScript.ts";
 
 const operation = ref<'compress' | 'merge'>('compress')
 
@@ -34,19 +36,39 @@ const mergeForm = reactive<MergeForm>({
   mode: 'copy',
 })
 
+const convertForm = reactive<ConvertForm>({
+  extractMode: 'none',
+  inputPattern: '*.mp4',
+  operation: 'convert',
+  targetFormat: 'mp4',
+  skipExisting: false,
+  videoCodec: 'copy',
+  audioCodec: 'copy',
+  audioBitrate: '128k',
+  outputDir: 'converted',
+  suffix: '_converted',
+  overwrite: true
+})
+
 // 根据 operation 派发
 const command = computed(() => {
-  if (operation.value === 'compress') {
-    return buildCompressBatCommand(compressForm)
-  }
-  return '（合并模式不使用单条命令）'
+  // if (operation.value === 'compress') {
+  //   return buildCompressBatCommand(compressForm)
+  // }
+  return '（因无法获取您的本地路径，暂不使用单条命令）'
 })
 
 const script = computed(() => {
   if (operation.value === 'compress') {
     return buildCompressBatScript(compressForm)
   }
-  return buildMergeBatScript(mergeForm)
+  else if(operation.value === 'merge') {
+    return buildMergeBatScript(mergeForm)
+  }
+  else if(operation.value === 'convert') {
+    return buildConvertBatScript(convertForm)
+  }
+
 })
 
 // 下载文件名
@@ -56,7 +78,26 @@ const batFilename = computed(() => {
     const res = compressForm.resolution === 'source' ? '原始分辨率' : `${compressForm.resolution}p`
     return `批量压缩_${codec}_CRF${compressForm.crf}_${res}.bat`
   }
-  return `批量合并_${mergeForm.inputPattern.replace('*', '')}.bat`
+
+  if (operation.value === 'merge') {
+    const format = mergeForm.inputPattern.replace('*.', '').toUpperCase()
+    const mode = mergeForm.mode === 'copy' ? '快速' : '重编码'
+    return `批量合并_${format}_${mode}.bat`
+  }
+
+  if (operation.value === 'convert') {
+    const target = convertForm.targetFormat.toUpperCase()
+    const isAudioOnly = convertForm.targetFormat === 'mp3' || convertForm.targetFormat === 'wav'
+
+    if (isAudioOnly) {
+      return `批量提取音频_${target}.bat`
+    }
+
+    return `批量转换_MP4转${target}.bat`
+  }
+
+  return "未知错误！该文件名无法获取"
+
 })
 </script>
 
@@ -78,6 +119,9 @@ const batFilename = computed(() => {
           </el-tab-pane>
           <el-tab-pane label="按文件名合并" name="merge">
             <MergeFormView v-model="mergeForm" />
+          </el-tab-pane>
+          <el-tab-pane label="视频批量转格式" name="convert">
+            <ConvertFormView v-model="convertForm"></ConvertFormView>
           </el-tab-pane>
         </el-tabs>
       </section>
