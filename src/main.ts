@@ -6,7 +6,6 @@ import {buildCompressBatCommand} from "@/utils/BuildCompressBatCommand.ts";
 import {buildBatScript} from "@/utils/BuildeBatScript.ts";
 import ElPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-import {useScriptGenerator} from "@/composables/useScirptGenerator.ts";
 
 
 
