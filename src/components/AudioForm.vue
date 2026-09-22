@@ -178,12 +178,12 @@ watch(() => form.value.inputPattern, handleInputPatternChange)
     </template>
     <!-- 输出目录 -->
     <el-form-item label="输出目录(建议此处使用全英文路径)">
-      <el-input v-model="form.outputDir" placeholder="converted" />
+      <el-input v-model="form.outputDir" placeholder="audio-conv" />
     </el-form-item>
 
     <!-- 文件名后缀 -->
     <el-form-item label="文件名后缀(建议此处使用英文)">
-      <el-input v-model="form.suffix" placeholder="_converted" />
+      <el-input v-model="form.suffix" placeholder="_audio-conv" />
     </el-form-item>
 
     <!-- 跳过已存在 -->
