@@ -112,6 +112,17 @@ const batFilename = computed(() => {
     return `批量转换_MP4转${target}.bat`
   }
 
+  if (operation.value === 'audio-convert') {
+    if (audioConvertForm.asrPreset) {
+      return `批量音频转换_ASR格式.bat`
+    }
+    const source = audioConvertForm.inputPattern.replace('*.', '').toUpperCase()
+    const target = audioConvertForm.targetFormat.toUpperCase()
+    const audioCodec = audioConvertForm.audioCodec
+    const bitrate = audioConvertForm.audioBitrate;
+    return `批量音频转换_${source}转${target}_${audioCodec}-${bitrate}.bat`
+  }
+
   return "未知错误！该文件名无法获取"
 
 })

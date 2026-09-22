@@ -88,14 +88,14 @@ watch(() => form.value.inputPattern, handleInputPatternChange)
           <el-option-group label="常见格式">
             <el-option label="MP3（*.mp3）" value="*.mp3" />
             <el-option label="WAV（*.wav）" value="*.wav" />
-            <el-option label="M4A（*.m4a）" value="*.m4a" />
+            <el-option label="M4A（*.m4a 常见录音）" value="*.m4a" />
             <el-option label="FLAC（*.flac）" value="*.flac" />
             <el-option label="AAC（*.aac）" value="*.aac" />
             <el-option label="OGG（*.ogg）" value="*.ogg" />
             <el-option label="Opus（*.opus）" value="*.opus" />
           </el-option-group>
           <el-option-group label="特殊格式">
-            <el-option label="AMR（*.amr，微信语音）" value="*.amr" />
+            <el-option label="AMR（*.amr，安卓通话语音）" value="*.amr" />
             <el-option label="APE（*.ape，无损）" value="*.ape" />
             <el-option label="3GP（*.3gp，安卓录音）" value="*.3gp" />
             <el-option label="WMA（*.wma，Windows）" value="*.wma" />
