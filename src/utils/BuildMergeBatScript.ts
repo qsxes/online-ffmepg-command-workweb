@@ -1,34 +1,31 @@
-import type { MergeForm } from '@/types/form'
+import type {MergeForm} from "@/types/form.ts";
 import {buildMergeBatCommand} from "@/utils/BuildMergeBatCommand.ts";
 
-/**
- * 根据用户配置生成 Windows 批处理脚本（.bat）
- *
- * 生成的脚本能力：
- * 1. 设置 UTF-8 编码，支持中文文件名
- * 2. 检查 ffmpeg 是否存在
- * 3. 按文件名自然顺序列出当前文件夹的视频/音频
- * 4. 用 concat 解复用器合并
- * 5. 快速合并（-c copy）或重新编码
- * 6. 结束后 pause，防止窗口闪退
- *
- * @param form 用户配置的合并表单
- * @returns 完整的 .bat 文件内容字符串（使用 \r\n 换行）
- */
-
-export function buildMergeBatScript(form:MergeForm){
+export function buildMergeBatScript(form: MergeForm): string {
     const modeText = form.mode === 'copy' ? '快速合并（不重编码）' : '重新编码（兼容性优先）'
     const cmd = buildMergeBatCommand(form)
-    // 输出文件名（如果用户没写扩展名，自动补上）
-    const outputExt = form.inputPattern.replace('*', '')  // '*.mp4' → '.mp4'
+
+    // 输出文件名
+    const outputExt = form.inputPattern.replace('*', '')
     const outputFile = form.outputName.includes('.')
         ? form.outputName
         : `${form.outputName}${outputExt}`
 
-    // concat 参数：快速合并用 -c copy，重编码用默认（重新编码）
-    const concatArgs = form.mode === 'copy'
-        ? '-c copy'
-        : '-c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k'
+    // 跳过逻辑：skipExisting 时，输出已存在就提前退出
+    const skipBlock = form.skipExisting
+        ? `REM 检查输出文件是否已存在
+if exist "%OUT%\\${outputFile}" (
+  echo.
+  echo [跳过] 输出文件已存在：${outputFile}
+  echo 如需重新合并，请关闭「跳过已存在」后重新生成脚本。
+  echo.
+  del "%LIST%"
+  pause
+  exit /b 0
+)
+
+`
+        : ''
 
     const script = `@echo off
 chcp 65001 >nul
@@ -68,6 +65,7 @@ echo ============================================
 echo   输入格式=${form.inputPattern}
 echo   合并模式=${modeText}
 echo   输出文件=%OUT%\\${outputFile}
+echo   跳过已存在=${form.skipExisting ? '是' : '否'}
 echo ============================================
 echo.
 
@@ -90,7 +88,7 @@ if "%SIZE%"=="0" (
   exit /b 1
 )
 
-echo [合并] 正在合并为 ${outputFile}...
+${skipBlock}echo [合并] 正在合并为 ${outputFile}...
 echo.
 
 ${cmd}

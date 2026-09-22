@@ -30,6 +30,14 @@ const form = defineModel<MergeForm>({ required: true })
       <el-input v-model="form.outputDir" placeholder="merged" />
     </el-form-item>
 
+    <el-form-item label="输出文件已存在时">
+      <el-switch v-model="form.skipExisting" />
+      <div class="hint">
+        开启后，如果输出文件已存在，跳过不处理。
+        关闭后，会重新合并并覆盖旧文件。
+      </div>
+    </el-form-item>
+
     <el-alert type="info" :closable="false">
       <p>脚本会按文件名的自然顺序(0-9,a-z,无法识别拼音)合并，例如：1.mp4 → 2.mp4 → 10.mp4</p>
       <p>把 .bat 放到有视频的文件夹，双击运行。</p>

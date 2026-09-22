@@ -64,20 +64,20 @@ const form = defineModel<CompressForm>({ required: true })
       <div class="hint">输出目录里已有同名文件时，跳过不处理。</div>
     </el-form-item>
 
-    <!-- overwrite: boolean -->
-    <el-form-item label="覆盖输出">
-      <el-switch
-          v-model="form.overwrite"
-          :disabled="form.skipExisting"
-      />
-      <div v-if="form.skipExisting" class="hint">
-        已开启「跳过已存在」，覆盖输出不会生效。
-        关闭「跳过已存在」后，此开关才起作用。
-      </div>
-      <div v-else class="hint">
-        FFmpeg 处理时，如果输出文件已存在，直接覆盖，不询问。
-      </div>
-    </el-form-item>
+<!--    &lt;!&ndash; overwrite: boolean &ndash;&gt;-->
+<!--    <el-form-item label="覆盖输出">-->
+<!--      <el-switch-->
+<!--          v-model="form.overwrite"-->
+<!--          :disabled="form.skipExisting"-->
+<!--      />-->
+<!--      <div v-if="form.skipExisting" class="hint">-->
+<!--        已开启「跳过已存在」，覆盖输出不会生效。-->
+<!--        关闭「跳过已存在」后，此开关才起作用。-->
+<!--      </div>-->
+<!--      <div v-else class="hint">-->
+<!--        FFmpeg 处理时，如果输出文件已存在，直接覆盖，不询问。-->
+<!--      </div>-->
+<!--    </el-form-item>-->
   </el-form>
 </template>
 

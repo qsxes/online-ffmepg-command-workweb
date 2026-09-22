@@ -1,3 +1,4 @@
+//视频压缩
 export interface CompressForm{
     /**
      * 操作类型
@@ -115,25 +116,25 @@ export interface CompressForm{
      */
     skipExisting: boolean
 
-    /**
-     * 是否覆盖输出文件
-     * 对应 FFmpeg 参数：-y
-     *
-     * true  = 输出文件已存在时，直接覆盖，不询问
-     * false = 输出文件已存在时，FFmpeg 会卡在询问，脚本会停住
-     *
-     * 注意：在批处理脚本里，几乎必须为 true
-     * 否则遇到已存在文件，脚本会卡住等用户输入
-     *
-     * 用户看到的：一个开关，默认开启
-     *
-     * ⚠️ 和 skipExisting 的关系：
-     * - skipExisting 为 true 时，已存在的文件根本不会进入 FFmpeg
-     * - overwrite 为 true 时，进入 FFmpeg 的文件会被直接覆盖
-     * - 两者默认都开，逻辑上不冲突：
-     *   先判断跳过，跳过的就不处理；没跳过的就覆盖处理
-     */
-    overwrite: boolean
+    // /**
+    //  * 是否覆盖输出文件
+    //  * 对应 FFmpeg 参数：-y
+    //  *
+    //  * true  = 输出文件已存在时，直接覆盖，不询问
+    //  * false = 输出文件已存在时，FFmpeg 会卡在询问，脚本会停住
+    //  *
+    //  * 注意：在批处理脚本里，几乎必须为 true
+    //  * 否则遇到已存在文件，脚本会卡住等用户输入
+    //  *
+    //  * 用户看到的：一个开关，默认开启
+    //  *
+    //  * ⚠️ 和 skipExisting 的关系：
+    //  * - skipExisting 为 true 时，已存在的文件根本不会进入 FFmpeg
+    //  * - overwrite 为 true 时，进入 FFmpeg 的文件会被直接覆盖
+    //  * - 两者默认都开，逻辑上不冲突：
+    //  *   先判断跳过，跳过的就不处理；没跳过的就覆盖处理
+    //  */
+    // overwrite: boolean
 }
 
 // 合并表单
@@ -143,6 +144,7 @@ export interface MergeForm {
     outputName: string
     outputDir: string
     mode: 'copy' | 'reencode'   // 快速合并 / 重新编码
+    skipExisting: boolean
 }
 
 // 格式转换表单
@@ -253,18 +255,18 @@ export interface ConvertForm {
      */
     suffix: string
 
-    /**
-     * 是否覆盖输出文件
-     * 对应 FFmpeg 参数：-y
-     *
-     * true  = 输出文件已存在时直接覆盖，不询问
-     * false = 输出文件已存在时，FFmpeg 会卡在询问，脚本停住
-     *
-     * 批处理脚本里几乎必须为 true，否则遇到已存在文件会卡死
-     *
-     * 用户看到的：一个开关，默认开启
-     */
-    overwrite: boolean
+    // /**
+    //  * 是否覆盖输出文件
+    //  * 对应 FFmpeg 参数：-y
+    //  *
+    //  * true  = 输出文件已存在时直接覆盖，不询问
+    //  * false = 输出文件已存在时，FFmpeg 会卡在询问，脚本停住
+    //  *
+    //  * 批处理脚本里几乎必须为 true，否则遇到已存在文件会卡死
+    //  *
+    //  * 用户看到的：一个开关，默认开启
+    //  */
+    // overwrite: boolean
 
 
     /**
@@ -283,5 +285,27 @@ export interface ConvertForm {
      */
     extractMode: 'none' | 'audio' | 'video'
 }
+
+
+//音频格式转换表单
+export interface AudioConvertForm {
+    operation: 'audio-convert'
+    inputPattern: '*.mp3' | '*.wav' | '*.m4a' | '*.flac' | '*.aac' | '*.ogg'
+        | '*.amr' | '*.ape' | '*.3gp' | '*.wma'
+    targetFormat: 'mp3' | 'wav' | 'm4a' | 'aac' | 'flac' | 'ogg'
+    audioCodec: 'copy' | 'libmp3lame' | 'aac' | 'libopus' | 'flac' | 'pcm_s16le'
+    audioBitrate: '96k' | '128k' | '192k' | '320k'
+    outputDir: string
+    suffix: string
+    skipExisting: boolean
+
+    /**
+     * 语音识别预设
+     *
+     * true  = 输出 16kHz / 单声道 / WAV，适合喂给 ASR、Whisper、大模型
+     * false = 按正常参数转换
+     */
+    asrPreset: boolean
+}
 // 联合类型
-export type FormState = CompressForm | MergeForm | ConvertForm
+export type FormState = CompressForm | MergeForm | ConvertForm | AudioConvertForm

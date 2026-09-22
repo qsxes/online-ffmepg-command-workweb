@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
-import type {CompressForm, ConvertForm, MergeForm} from '@/types/form'
+import type {AudioConvertForm, CompressForm, ConvertForm, MergeForm} from '@/types/form'
 import CompressFormView from '@/components/CompressForm.vue'
 import MergeFormView from '@/components/MergeForm.vue'
 import ScriptActions from '@/components/ScriptActions.vue'
@@ -11,8 +11,10 @@ import { buildMergeBatScript } from '@/utils/BuildMergeBatScript'
 import Drawer from "@/components/Drawer.vue";
 import ConvertFormView from "@/components/ConvertForm.vue"
 import {buildConvertBatScript} from "@/utils/BuildConvertBatScript.ts";
+import {buildAudioConvertBatScript} from "@/utils/BuildAudioConvertBatScript.ts";
+import AudioForm from "@/components/AudioForm.vue";
 
-const operation = ref<'compress' | 'merge' |'convert'>('compress')
+const operation = ref<'compress' | 'merge' |'convert' | 'audio-convert'>('compress')
 
 // 两个独立表单
 const compressForm = reactive<CompressForm>({
@@ -25,15 +27,15 @@ const compressForm = reactive<CompressForm>({
   outputDir: 'finished',
   suffix: '_finished',
   skipExisting: true,
-  overwrite: true,
 })
 
 const mergeForm = reactive<MergeForm>({
+  skipExisting: false,
   operation: 'merge',
   inputPattern: '*.mp4',
   outputName: 'merged',
   outputDir: 'merged',
-  mode: 'copy',
+  mode: 'copy'
 })
 
 const convertForm = reactive<ConvertForm>({
@@ -47,7 +49,18 @@ const convertForm = reactive<ConvertForm>({
   audioBitrate: '128k',
   outputDir: 'converted',
   suffix: '_converted',
-  overwrite: true
+})
+
+const audioConvertForm = reactive<AudioConvertForm>({
+  operation: 'audio-convert',
+  inputPattern: '*.mp3',
+  targetFormat: 'mp3',
+  audioCodec: 'libmp3lame',
+  audioBitrate: '192k',
+  outputDir: 'converted',
+  suffix: '_converted',
+  skipExisting: true,
+  asrPreset: false,
 })
 
 // 根据 operation 派发
@@ -67,6 +80,9 @@ const script = computed(() => {
   }
   else if(operation.value === 'convert') {
     return buildConvertBatScript(convertForm)
+  }
+  else if(operation.value === 'audio-convert') {
+    return buildAudioConvertBatScript(audioConvertForm)
   }
   return ''
 })
@@ -122,6 +138,9 @@ const batFilename = computed(() => {
           </el-tab-pane>
           <el-tab-pane label="视频批量转格式" name="convert">
             <ConvertFormView v-model="convertForm"></ConvertFormView>
+          </el-tab-pane>
+          <el-tab-pane label="音频批量转格式" name="audio-convert">
+            <AudioForm v-model="audioConvertForm"></AudioForm>
           </el-tab-pane>
         </el-tabs>
       </section>

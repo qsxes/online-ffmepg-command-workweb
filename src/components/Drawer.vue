@@ -29,6 +29,25 @@ const drawer = ref(false)
         <pre>ffmpeg -version</pre>
       </li>
     </ol>
+    <el-collapse>
+      <el-collapse-item title="❓ winget 下载失败 / 很慢怎么办？" name="manual">
+          <ol>
+            <p>原因：winget 默认从 GitHub 下载，国内网络可能连不上。</p>
+            <p>解决方法：换成国内镜像源</p>
+            <ol>
+              <li>以管理员身份打开 PowerShell</li>
+              <li>执行：
+                <pre>winget source remove winget</pre>
+                <pre>winget source add winget https://mirrors.ustc.edu.cn/winget-source --trust-level trusted</pre>
+              </li>
+              <li> 重新执行安装命令：
+                  <pre>winget install ffmpeg</pre>
+                <p>换源后下载速度应该会明显变快。</p>
+              </li>
+            </ol>
+          </ol>
+      </el-collapse-item>
+    </el-collapse>
 
     <h3>方式二：手动下载安装（备选）</h3>
     <el-collapse>
