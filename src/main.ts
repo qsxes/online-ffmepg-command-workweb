@@ -28,8 +28,6 @@ import 'element-plus/dist/index.css'
 // downloadBat(ffmepgBat)
 
 //测试脚本生成
-const{command,script}=useScriptGenerator()
-console.log(command)
 
 const appV = createApp(App)
 appV.use(ElPlus)
