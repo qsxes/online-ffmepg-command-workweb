@@ -115,6 +115,9 @@ function addOrSaveSegment() {
 // ============================================================
 function editSegment(index: number) {
   const seg = form.value.segments[index]
+  if (!seg) {
+    return
+  }
   inputStart.value = seg.start
   inputEnd.value = seg.end
   editingIndex.value = index
@@ -177,9 +180,18 @@ function secondsToTime(s: number): string {
 
 function timeToSeconds(t: string): number {
   const parts = t.split(':').map(Number)
-  if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2]
-  if (parts.length === 2) return parts[0] * 60 + parts[1]
-  return parts[0]
+
+  if (parts.length === 3) {
+    const [h = 0, m = 0, s = 0] = parts
+    return h * 3600 + m * 60 + s
+  }
+
+  if (parts.length === 2) {
+    const [m = 0, s = 0] = parts
+    return m * 60 + s
+  }
+
+  return parts[0] ?? 0
 }
 
 function segmentDuration(seg: CutSegment): string {
