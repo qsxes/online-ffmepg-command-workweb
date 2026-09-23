@@ -45,6 +45,17 @@ winget install ffmpeg</pre>
         <pre>Repair-WinGetPackageManager -Force -Latest</pre>
         <p>或者重新 <code>winget install ffmpeg</code>。</p>
       </el-collapse-item>
+
+      <el-collapse-item title="❓ CMD 里 ffmpeg -version 显示正常，脚本运行还是报错" name="run-error">
+        <p><strong>原因：</strong>通常是 PATH 只对当前用户生效，或 CMD 没重启。</p>
+        <p><strong>解决：</strong>关闭所有 CMD 窗口重新打开；</p>
+        <p>如果还不行， 在<span class="float-text">高级系统设置</span>中把 FFmpeg 的 bin 目录加入「系统变量」而不是「用户变量」</p>
+      </el-collapse-item>
+
+      <el-collapse-item title="❓ 我装的是旧版 FFmpeg，脚本还能跑吗" name="version-prob">
+        <p><strong>回答：</strong>通本工具生成的命令只用了常用参数，FFmpeg 4.0 以上都能跑。</p>
+        <p><strong>解决：</strong>如果遇到报错，请检查 errors.log 或升级到最新版。</p>
+      </el-collapse-item>
     </el-collapse>
 
     <!-- ============================================================ -->
@@ -97,15 +108,6 @@ winget install ffmpeg</pre>
         </ol>
       </el-collapse-item>
 
-      <el-collapse-item title="❓ 中文文件名 / 路径报错" name="chinese-path">
-        <p>脚本已加 <code>chcp 65001</code> 支持中文。如果仍然报错：</p>
-        <ol>
-          <li>检查 CMD 字体是否支持中文（推荐 Consolas 或新宋体）</li>
-          <li>尝试把文件移到<strong>无中文、无空格</strong>的路径（如 <code>D:\temp\</code>）</li>
-          <li>如果问题持续，请反馈具体报错信息</li>
-        </ol>
-      </el-collapse-item>
-
       <el-collapse-item title="❓ 路径含空格 / & / % 报错" name="special-chars">
         <p>这些特殊字符在批处理里是转义重灾区。</p>
         <p><strong>已知情况：</strong></p>
@@ -116,7 +118,58 @@ winget install ffmpeg</pre>
         </ul>
         <p>如果报错，最简单的解决：<strong>改名去掉特殊字符</strong>。</p>
       </el-collapse-item>
+      <el-collapse-item title="❓ 批量处理时怎么知道处理到哪了" name="run-process">
+        <p>脚本会打印 [处理] / [完成] / [跳过] 每个文件的进度。</p>
+        <p><strong>比如：</strong>[处理] video1.mp4 → [完成] video1.mp4</p>
+      </el-collapse-item>
+      <el-collapse-item title="❓ 某个文件处理失败，脚本会继续还是停止？" name="fail-continue">
+        <p><strong>继续。</strong>单个文件失败不影响其他文件。</p>
+        <p>失败的文件名会写入 <code>errors.log</code>，脚本跑完后可以查看。</p>
+        <p>脚本最后会提示：</p>
+        <pre>有文件处理失败，请查看日志。</pre>
+      </el-collapse-item>
+
+      <el-collapse-item title="❓ 磁盘空间不够怎么办？" name="disk-full">
+        <p>FFmpeg 会报错，写入 <code>errors.log</code>。</p>
+        <p><strong>已经处理完的文件不受影响</strong>，脚本会继续处理后续文件（后续也会因空间不足而失败）。</p>
+        <p><strong>解决：</strong></p>
+        <ol>
+          <li>清理磁盘空间</li>
+          <li>重新运行脚本（开启「跳过已存在」可避免重复处理已成功的文件）</li>
+        </ol>
+      </el-collapse-item>
+
+      <el-collapse-item title="❓ 输出文件名可以自定义吗？" name="custom-filename">
+        <p>可以改「文件名后缀」，比如：</p>
+        <ul>
+          <li><code>_finished</code> → <code>a.mp4</code> 变成 <code>a_finished.mp4</code></li>
+          <li><code>_v2</code> → <code>a.mp4</code> 变成 <code>a_v2.mp4</code></li>
+        </ul>
+        <p>不支持改前缀或完全自定义文件名（如 <code>我的视频.mp4</code>）。</p>
+      </el-collapse-item>
+
+      <el-collapse-item title="❓ 在 PowerShell 里运行 .bat 和 CMD 有什么区别？" name="powershell-vs-cmd">
+        <p><strong>建议在 CMD 里双击运行。</strong></p>
+        <ul>
+          <li><strong>双击 .bat</strong>：系统默认用 CMD 执行，最省事</li>
+          <li><strong>PowerShell</strong>：也能跑，但需要加前缀 <code>.\</code>，例如 <code>.\compress.bat</code></li>
+        </ul>
+        <p>如果你习惯 PowerShell，记得加 <code>.\</code> 前缀。</p>
+      </el-collapse-item>
+
+      <el-collapse-item title="❓ 中文路径会乱码吗？" name="chinese-path">
+        <p>脚本已加 <code>chcp 65001</code>（UTF-8）支持中文。如果仍乱码：</p>
+        <ol>
+          <li>检查 CMD 字体是否支持中文（推荐 Consolas 或新宋体）</li>
+          <li>尝试把文件移到<strong>无中文、无空格</strong>的路径（如 <code>D:\temp\</code>）</li>
+          <li>如果问题持续，请反馈具体报错信息</li>
+        </ol>
+        <p><strong>注意：</strong>文件名含 <code>%</code> 或 <code>&amp;</code> 时，无论中英文都可能出问题，建议改名。</p>
+      </el-collapse-item>
     </el-collapse>
+
+
+
 
     <!-- ============================================================ -->
     <h3>功能相关</h3>
@@ -155,6 +208,30 @@ winget install ffmpeg</pre>
         <p><strong>.silk：</strong>不能。这是腾讯自研格式，FFmpeg 不支持。</p>
         <p>需要先用第三方工具（如 silk2mp3）转成 mp3，再用本工具处理。</p>
       </el-collapse-item>
+
+      <el-collapse-item title="❓ 支持处理子文件夹吗？" name="subfolder">
+        <p><strong>不支持。</strong>脚本只处理自己所在文件夹里的文件，不会递归遍历子文件夹。</p>
+        <p><strong>如果有多个子文件夹：</strong></p>
+        <ul>
+          <li>方法一：每个子文件夹放一份 .bat，分别运行</li>
+          <li>方法二：先把文件手动移到同一个文件夹，再运行一次</li>
+        </ul>
+        <p><strong>为什么不做递归？</strong>递归会让输出目录结构变复杂，出问题不好排查。扁平处理更直观。</p>
+      </el-collapse-item>
+
+      <el-collapse-item title="❓ 支持哪些视频 / 音频格式？" name="supported-formats">
+        <p><strong>视频格式：</strong></p>
+        <pre>mp4 · mkv · mov · avi · webm · ts</pre>
+
+        <p><strong>音频格式：</strong></p>
+        <pre>mp3 · wav · m4a · flac · aac · ogg · amr · ape · 3gp · wma</pre>
+
+        <p><strong>其他格式</strong>（如 rmvb、flv、silk）需要先用其他工具转成上面支持的格式，再用本工具处理。</p>
+
+        <p style="color: #909399; font-size: 13px;">
+          实际支持范围取决于你的 FFmpeg 编译选项。官方 build 覆盖了上面全部格式。
+        </p>
+      </el-collapse-item>
     </el-collapse>
 
     <!-- ============================================================ -->
@@ -180,6 +257,19 @@ winget install ffmpeg</pre>
       <el-collapse-item title="❓ 支持 macOS / Linux 吗？" name="other-os">
         <p>目前只支持 Windows（生成 .bat 脚本）。</p>
         <p>macOS / Linux 理论上可以用 <code>.sh</code> 脚本，但还没做。有需求的话后续考虑。</p>
+      </el-collapse-item>
+
+      <el-collapse-item title="❓ 有命令行版本吗？还是只能网页？" name="cli-version">
+        <p><strong>只有网页版；</strong>没有独立的命令行工具或桌面应用。</p>
+        <p>但网页生成的<strong>就是 FFmpeg 脚本的包装</strong>，熟悉命令行的用户可以：</p>
+        <ul>
+          <li>下载 .bat，用记事本打开，复制里面的 ffmpeg 命令</li>
+          <li>改成自己需要的参数，粘贴到 CMD 里直接运行</li>
+        </ul>
+        <p style="color: #909399; font-size: 13px;">
+          注：脚本里的命令包含 <code>%%F</code>、<code>%OUT%</code> 等批处理专用变量，
+          直接粘贴到 CMD 会报错。参考时需要手动替换成真实文件名和路径。
+        </p>
       </el-collapse-item>
     </el-collapse>
 

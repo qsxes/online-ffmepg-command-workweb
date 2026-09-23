@@ -9,7 +9,7 @@ import type { AudioConvertForm } from '@/types/form'
  * - %OUT%    .bat 中定义的输出目录
  */
 export function buildAudioConvertBatCommand(form: AudioConvertForm): string {
-    const parts: string[] = ['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y']
+    const parts: string[] = ['ffmpeg', '-hide_banner', '-loglevel', 'error', '-stats', '-y']
 
     if (form.asrPreset) {
         // ASR 预设：强制 wav + pcm_s16le + 16k + mono

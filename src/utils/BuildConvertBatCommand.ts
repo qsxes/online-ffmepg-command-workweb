@@ -9,7 +9,7 @@ import type { ConvertForm } from '@/types/form'
  * - %OUT%    .bat 中定义的输出目录
  */
 export function buildConvertBatCommand(form: ConvertForm): string {
-    const parts: string[] = ['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y']
+    const parts: string[] = ['ffmpeg', '-hide_banner', '-loglevel', 'error','-stats', '-y']
 
     // 输入
     parts.push('-i', '"%%F"')

@@ -18,7 +18,7 @@ export function buildCutBatCommand(
     segment: CutSegment,
     index: number
 ): string {
-    const parts: string[] = ['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y']
+    const parts: string[] = ['ffmpeg', '-hide_banner', '-loglevel', 'error','-stats', '-y']
 
     // -ss / -to 放在 -i 前面：
     // 1. 快速 seek，不解码前面的内容

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { watch } from 'vue'
-import type { AudioConvertForm } from '@/types/form'
+import type { AudioConvertForm } from '@/types/form.ts'
+import ParamsDrawer from "@/components/drawers/ParamsDrawer.vue";
 
 const form = defineModel<AudioConvertForm>({ required: true })
 
@@ -195,7 +196,7 @@ watch(() => form.value.inputPattern, handleInputPatternChange)
     </el-form-item>
 
 
-
+  <ParamsDrawer operation="audio-convert"></ParamsDrawer>
   </el-form>
 </template>
 

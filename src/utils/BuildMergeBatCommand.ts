@@ -13,6 +13,7 @@ export function buildMergeBatCommand(form: MergeForm): string {
         '-hide_banner',
         '-loglevel',
         'error',
+        '-stats',
         '-y',
         '-f', 'concat',
         '-safe', '0',

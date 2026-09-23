@@ -1,0 +1,25 @@
+h3 {
+    margin: 24px 0 8px;
+    font-size: 15px;
+    color: #303133;
+}
+h3:first-child { margin-top: 0; }
+p { margin: 6px 0; line-height: 1.6; font-size: 14px; }
+ul, ol { padding-left: 20px; margin: 6px 0; }
+li { margin: 4px 0; line-height: 1.6; font-size: 14px; }
+pre {
+    background: #f5f5f5;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    margin: 6px 0;
+    overflow-x: auto;
+}
+code {
+    background: #f5f5f5;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-family: Consolas, Monaco, monospace;
+}
+.el-divider { margin: 24px 0; }

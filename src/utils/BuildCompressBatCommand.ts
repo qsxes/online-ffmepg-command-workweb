@@ -4,7 +4,7 @@ import type { CompressForm } from '@/types/form'
 export function buildCompressBatCommand(form: CompressForm): string {
 
     //命令行选项
-    const parts: string[] = ['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y']
+    const parts: string[] = ['ffmpeg', '-hide_banner', '-loglevel', 'error','-stats', '-y']
 
     // 输入（脚本里用 %%F 表示当前文件）
     parts.push('-i', '"%%F"')

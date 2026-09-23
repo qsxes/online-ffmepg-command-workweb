@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, onUnmounted } from 'vue'
-import type { CutForm, CutSegment } from '@/types/form'
+import type { CutForm, CutSegment } from '@/types/form.ts'
+import ParamsDrawer from "@/components/drawers/ParamsDrawer.vue";
+
 
 const form = defineModel<CutForm>({ required: true })
 
@@ -388,6 +390,7 @@ onUnmounted(() => {
       下载 .bat 后，请把它放到与视频同一文件夹，双击运行。
     </el-alert>
 
+    <ParamsDrawer operation="cut"></ParamsDrawer>
   </el-form>
 </template>
 

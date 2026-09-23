@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { MergeForm } from '@/types/form'
+import type { MergeForm } from '@/types/form.ts'
+import ParamsDrawer from "@/components/drawers/ParamsDrawer.vue";
 
 const form = defineModel<MergeForm>({ required: true })
 </script>
@@ -42,6 +43,7 @@ const form = defineModel<MergeForm>({ required: true })
       <p>脚本会按文件名的自然顺序(0-9,a-z,无法识别拼音)合并，例如：1.mp4 → 2.mp4 → 10.mp4</p>
       <p>把 .bat 放到有视频的文件夹，双击运行。</p>
     </el-alert>
+    <ParamsDrawer operation="merge"></ParamsDrawer>
   </el-form>
 </template>
 

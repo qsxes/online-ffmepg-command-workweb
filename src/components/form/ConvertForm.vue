@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import type { ConvertForm } from '@/types/form'
+import type { ConvertForm } from '@/types/form.ts'
 import {watch} from "vue";
+import ParamsDrawer from "@/components/drawers/ParamsDrawer.vue";
 
 const form = defineModel<ConvertForm>({ required: true })
 
@@ -188,6 +189,7 @@ watch(() => form.value.targetFormat, (target) => {
 <!--        FFmpeg 处理时，如果输出文件已存在，直接覆盖，不询问。-->
 <!--      </div>-->
 <!--    </el-form-item>-->
+    <ParamsDrawer operation="convert"></ParamsDrawer>
   </el-form>
 </template>
 

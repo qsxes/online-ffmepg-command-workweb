@@ -1,21 +1,20 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import type {AudioConvertForm, CompressForm, ConvertForm, CutForm, MergeForm} from '@/types/form'
-import CompressFormView from '@/components/CompressForm.vue'
-import MergeFormView from '@/components/MergeForm.vue'
+import CompressFormView from '@/components/form/CompressForm.vue'
+import MergeFormView from '@/components/form/MergeForm.vue'
 import ScriptActions from '@/components/ScriptActions.vue'
 import CommandPreview from '@/components/CommandPreview.vue'
-import { buildCompressBatCommand } from '@/utils/BuildCompressBatCommand'
 import { buildCompressBatScript } from '@/utils/BuildCompressBatScript'
 import { buildMergeBatScript } from '@/utils/BuildMergeBatScript'
-import InstallDrawer from "@/components/InstallDrawer.vue";
-import ConvertFormView from "@/components/ConvertForm.vue"
+import InstallDrawer from "@/components/drawers/InstallDrawer.vue";
+import ConvertFormView from "@/components/form/ConvertForm.vue"
 import {buildConvertBatScript} from "@/utils/BuildConvertBatScript.ts";
 import {buildAudioConvertBatScript} from "@/utils/BuildAudioConvertBatScript.ts";
-import AudioForm from "@/components/AudioForm.vue";
+import AudioForm from "@/components/form/AudioForm.vue";
 import {buildCutBatScript} from "@/utils/BuildCutBatScript.ts";
-import CutFormView from "@/components/CutFormView.vue";
-import FAQ_Drawer from "@/components/FAQ_Drawer.vue";
+import CutFormView from "@/components/form/CutFormView.vue";
+import FAQ_Drawer from "@/components/drawers/FAQ_Drawer.vue";
 
 const operation = ref<'compress' | 'merge' |'convert' | 'audio-convert' | 'cut'>('compress')
 
@@ -170,8 +169,11 @@ function stripExt(name: string): string {
           </span>
         </el-text>
       <el-divider></el-divider>
-      <InstallDrawer></InstallDrawer>
-      <FAQ_Drawer></FAQ_Drawer>
+      <el-space>
+        <InstallDrawer></InstallDrawer>
+        <FAQ_Drawer></FAQ_Drawer>
+      </el-space>
+
     </header>
 
     <!-- 只有左右两栏参与 grid -->

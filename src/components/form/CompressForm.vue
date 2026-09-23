@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { CompressForm } from '@/types/form'
+import type { CompressForm } from '@/types/form.ts'
+import ParamsDrawer from "@/components/drawers/ParamsDrawer.vue";
 
 const form = defineModel<CompressForm>({ required: true })
 </script>
@@ -78,6 +79,7 @@ const form = defineModel<CompressForm>({ required: true })
 <!--        FFmpeg 处理时，如果输出文件已存在，直接覆盖，不询问。-->
 <!--      </div>-->
 <!--    </el-form-item>-->
+    <ParamsDrawer operation="compress"></ParamsDrawer>
   </el-form>
 </template>
 
