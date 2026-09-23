@@ -33,8 +33,8 @@ const form = defineModel<MergeForm>({ required: true })
     <el-form-item label="输出文件已存在时">
       <el-switch v-model="form.skipExisting" />
       <div class="hint">
-        开启后，如果输出文件已存在，跳过不处理。
-        关闭后，会重新合并并覆盖旧文件。
+        开启后，如果输出文件已存在，跳过不处理
+        关闭后，会覆盖旧文件
       </div>
     </el-form-item>
 

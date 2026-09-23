@@ -15,7 +15,7 @@ const drawer = ref(false)
         show-icon
     />
 
-    <h3>方式一：一行命令搞定（推荐）</h3>
+    <h3>方式一：一行命令解决（推荐）</h3>
     <p>适合 Windows 10/11 用户，系统自带 winget（安装工具）</p>
     <ol>
       <li>按 <strong>Win 键</strong>，搜索 <code>PowerShell</code>。</li>

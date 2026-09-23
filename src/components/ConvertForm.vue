@@ -171,7 +171,7 @@ watch(() => form.value.targetFormat, (target) => {
     <!-- skipExisting: boolean -->
     <el-form-item label="跳过已存在">
       <el-switch v-model="form.skipExisting" />
-      <div class="hint">输出目录里已有同名文件时，跳过不处理。</div>
+      <div class="hint">输出目录里已有同名文件时，跳过不处理，关闭则覆盖</div>
     </el-form-item>
 
 <!--    &lt;!&ndash; overwrite: boolean &ndash;&gt;-->

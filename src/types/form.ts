@@ -307,5 +307,68 @@ export interface AudioConvertForm {
      */
     asrPreset: boolean
 }
+
+export interface CutSegment {
+    /**
+     * 片段开始时间
+     * 格式：HH:MM:SS.mmm（如 00:01:23.450）
+     */
+    start: string
+
+    /**
+     * 片段结束时间
+     * 格式：HH:MM:SS.mmm
+     */
+    end: string
+}
+
+export interface CutForm {
+    operation: 'cut'
+
+    /**
+     * 用户选的文件名
+     * 浏览器只能拿到文件名，拿不到完整路径
+     * .bat 里会写死这个文件名，用户必须把 .bat 放到视频同目录
+     */
+    fileName: string
+
+    /**
+     * 片段列表
+     * 每条记录是一个时间段，生成一条 ffmpeg 命令
+     * 支持多条，输出为 视频_cut_1.mp4, 视频_cut_2.mp4...
+     */
+    segments: CutSegment[]
+
+    /**
+     * 裁剪模式
+     *
+     * copy     = 快速裁剪（-c copy），秒级完成
+     *            吸附到最近关键帧，开头可能有 1-2 秒偏差
+     *
+     * reencode = 精确裁剪（重编码），帧级精确
+     *            慢，10 分钟视频可能几分钟
+     */
+    mode: 'copy' | 'reencode'
+
+    /**
+     * 输出文件名后缀
+     * 默认 '_cut'
+     * 输入 video.mp4 → 输出 video_cut_1.mp4, video_cut_2.mp4
+     */
+    suffix: string
+
+    /**
+     * 输出文件夹
+     */
+    outputDir: string
+
+    //合法的输入格式
+    inputPattern: '*.mp4' | '*.mkv' | '*.mov' | '*.avi' | '*.webm' | '*.ts'
+        | '*.mp3' | '*.wav' | '*.m4a' | '*.flac' | '*.aac' | '*.ogg'
+
+    //是否跳过已存在
+    skipExisting: boolean
+}
 // 联合类型
-export type FormState = CompressForm | MergeForm | ConvertForm | AudioConvertForm
+export type FormState = CompressForm | MergeForm
+    | ConvertForm | AudioConvertForm | CutForm

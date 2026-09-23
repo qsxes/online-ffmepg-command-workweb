@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
-import type {AudioConvertForm, CompressForm, ConvertForm, MergeForm} from '@/types/form'
+import type {AudioConvertForm, CompressForm, ConvertForm, CutForm, MergeForm} from '@/types/form'
 import CompressFormView from '@/components/CompressForm.vue'
 import MergeFormView from '@/components/MergeForm.vue'
 import ScriptActions from '@/components/ScriptActions.vue'
@@ -13,8 +13,10 @@ import ConvertFormView from "@/components/ConvertForm.vue"
 import {buildConvertBatScript} from "@/utils/BuildConvertBatScript.ts";
 import {buildAudioConvertBatScript} from "@/utils/BuildAudioConvertBatScript.ts";
 import AudioForm from "@/components/AudioForm.vue";
+import {buildCutBatScript} from "@/utils/BuildCutBatScript.ts";
+import CutFormView from "@/components/CutFormView.vue";
 
-const operation = ref<'compress' | 'merge' |'convert' | 'audio-convert'>('compress')
+const operation = ref<'compress' | 'merge' |'convert' | 'audio-convert' | 'cut'>('compress')
 
 // 两个独立表单
 const compressForm = reactive<CompressForm>({
@@ -30,7 +32,7 @@ const compressForm = reactive<CompressForm>({
 })
 
 const mergeForm = reactive<MergeForm>({
-  skipExisting: false,
+  skipExisting: true,
   operation: 'merge',
   inputPattern: '*.mp4',
   outputName: 'merged',
@@ -43,7 +45,7 @@ const convertForm = reactive<ConvertForm>({
   inputPattern: '*.mp4',
   operation: 'convert',
   targetFormat: 'mp4',
-  skipExisting: false,
+  skipExisting: true,
   videoCodec: 'copy',
   audioCodec: 'copy',
   audioBitrate: '128k',
@@ -61,6 +63,17 @@ const audioConvertForm = reactive<AudioConvertForm>({
   suffix: '_converted',
   skipExisting: true,
   asrPreset: false,
+})
+
+const cutForm = reactive<CutForm>({
+  operation: 'cut',
+  fileName: '',
+  segments: [],
+  mode: 'copy',
+  suffix: '_cut',
+  outputDir: 'cut',
+  inputPattern: '*.mp4',
+  skipExisting: true,
 })
 
 // 根据 operation 派发
@@ -83,6 +96,8 @@ const script = computed(() => {
   }
   else if(operation.value === 'audio-convert') {
     return buildAudioConvertBatScript(audioConvertForm)
+  }else if(operation.value === 'cut'){
+    return buildCutBatScript(cutForm)
   }
   return ''
 })
@@ -123,9 +138,22 @@ const batFilename = computed(() => {
     return `批量音频转换_${source}转${target}_${audioCodec}-${bitrate}.bat`
   }
 
+  if (operation.value === 'cut') {
+    if (!cutForm.fileName) {
+      return '视频裁剪.bat'
+    }
+    // 去掉扩展名，避免生成 .mp4.bat 被 Chrome 拦截
+    const baseName = stripExt(cutForm.fileName)
+    return `裁剪_${baseName}.bat`
+  }
   return "未知错误！该文件名无法获取"
 
 })
+
+//去除扩展名
+function stripExt(name: string): string {
+  return name.replace(/\.[^.]+$/, '')
+}
 </script>
 
 <template>
@@ -152,6 +180,9 @@ const batFilename = computed(() => {
           </el-tab-pane>
           <el-tab-pane label="音频批量转格式" name="audio-convert">
             <AudioForm v-model="audioConvertForm"></AudioForm>
+          </el-tab-pane>
+          <el-tab-pane label="音频视频剪辑" name="cut">
+            <CutFormView v-model="cutForm"></CutFormView>
           </el-tab-pane>
         </el-tabs>
       </section>

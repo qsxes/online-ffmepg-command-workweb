@@ -190,7 +190,7 @@ watch(() => form.value.inputPattern, handleInputPatternChange)
     <el-form-item label="跳过已存在">
       <el-switch v-model="form.skipExisting" />
       <div class="hint">
-        输出目录里已有同名文件时跳过不处理。关闭后，会重新处理并覆盖旧文件。
+        输出目录里已有同名文件时，跳过不处理，关闭则覆盖
       </div>
     </el-form-item>
 
