@@ -470,4 +470,15 @@ onUnmounted(() => {
   margin-top: 4px;
   line-height: 1.5;
 }
+
+/*
+等比缩放视频避免布局问题
+ */
+.media-preview {
+  width: 100%;
+  max-height: 360px;      /* 限制高度 */
+  object-fit: contain;    /* 保持宽高比，letterbox */
+  background: #000;
+  border-radius: 4px;
+}
 </style>
