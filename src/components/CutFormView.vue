@@ -28,6 +28,9 @@ const editingIndex = ref<number | null>(null)
 //   full = 整体预览（从入点播到出点，到边界自动暂停）
 const previewMode = ref<'idle' | 'full'>('idle')
 
+//fileInput：选择的视频音频文件
+const fileInput = ref<HTMLInputElement>()
+
 // previewSegment：当前正在预览的片段（用于 onTimeUpdate 判断边界）
 const previewSegment = ref<CutSegment | null>(null)
 
@@ -243,7 +246,14 @@ onUnmounted(() => {
     <!-- 选择文件                                                       -->
     <!-- ============================================================ -->
     <el-form-item label="选择文件">
-      <input type="file" accept="video/*,audio/*" @change="onFileChange" />
+      <input
+          ref="fileInput"
+          type="file"
+          accept="video/*,audio/*"
+          @change="onFileChange"
+          style="display: none"
+      />
+      <el-button @click="fileInput?.click()">选择文件</el-button>
       <span v-if="form.fileName" class="filename">{{ form.fileName }}</span>
     </el-form-item>
 
@@ -361,12 +371,12 @@ onUnmounted(() => {
 
     <el-form-item label="文件名后缀">
       <el-input v-model="form.suffix" placeholder="_cut" />
-      <div class="hint">多次裁剪同一文件时，请修改后缀（如 _cut2）避免覆盖。</div>
+      <div class="hint">多次裁剪同一文件时，请修改后缀（如 _cut2，_cut3等等）避免覆盖或跳过</div>
     </el-form-item>
 
     <el-form-item label="跳过已存在">
       <el-switch v-model="form.skipExisting" />
-      <div class="hint">输出文件已存在时跳过不处理。关闭后会覆盖旧文件。</div>
+      <div class="hint">输出文件已存在时跳过不处理；关闭后会覆盖旧文件</div>
     </el-form-item>
 
     <!-- 使用提示 -->
