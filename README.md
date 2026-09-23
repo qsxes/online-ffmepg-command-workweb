@@ -1,42 +1,105 @@
-# online-ffmepg-command-workweb
+# FFmpeg 工坊
 
-This template should help get you started developing with Vue 3 in Vite.
+> 在线生成配置，本地运行脚本。文件不离开你的电脑。
 
-## Recommended IDE Setup
+一个纯前端的 FFmpeg 本地批处理工作流生成器。打开网页，选好参数，下载 `.bat` 脚本，放到视频文件夹双击运行。压缩、合并、转格式、音频转换、裁剪，全部在本地完成。
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+**在线体验**：https://qsxes.github.io/online-ffmepg-command-workweb/
 
-## Recommended Browser Setup
+---
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## 为什么做这个
 
-## Type Support for `.vue` Imports in TS
+FFmpeg 功能强大，但命令行参数复杂，普通用户难以驾驭。在线工具虽然方便，但需要上传文件，有大小限制，隐私也没有保障。
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+换一个思路：**浏览器只负责生成脚本，计算交给本地的 FFmpeg。**
 
-## Customize configuration
+- 文件不上传、不经过服务器
+- 没有文件大小限制
+- 零服务器成本，纯静态部署
+- 生成的是可复用的 `.bat` 脚本，随时重跑
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+---
 
-## Project Setup
+## 核心功能
 
-```sh
+| 功能 | 说明                                    | 适用场景                   |
+|---|---------------------------------------|------------------------|
+| **批量压缩** | H.264 / H.265，CRF 18-28，preset 可选     | 手机视频太大、B站投稿            |
+| **按文件名合并** | 自然顺序合并（1 → 2 → 10 a→z），快速或重编码         | 分段录像、课程拼接 |
+| **视频转格式** | MP4 / MKV / MOV / WebM / AVI，可提取音频或视频 | MOV 转 MP4、MP4 转 WebM   |
+| **音频转格式** | 10+ 格式互转，支持 ASR 预设（16k mono wav）      | m4a 转 mp3、flac 车载、喂给 AI |
+| **视频/音频裁剪** | 多片段管理，本地预览，快速或精确模式                    | 去片头、截片段、铃声制作           |
+
+---
+
+## 技术栈
+
+- **前端**：Vue 3 + TypeScript + Vite
+- **UI**：Element Plus
+- **状态管理**：`reactive` + `computed`，无 Pinia
+- **部署**：GitHub Pages（纯静态，零后端）
+- **核心逻辑**：纯字符串模板拼接，无 WASM，无服务端
+
+---
+
+## 快速开始
+
+### 在线使用（推荐）
+
+直接打开 https://qsxes.github.io/online-ffmepg-command-workweb/
+
+1. 选好参数，下载 `.bat` 脚本
+2. 把脚本放到视频所在的文件夹
+3. 双击运行
+
+**前提**：电脑上已安装 FFmpeg 并加入 PATH。安装指南见网站内「安装指南」。
+
+### 本地开发
+
+```bash
+# 安装依赖
 npm install
-```
 
-### Compile and Hot-Reload for Development
-
-```sh
+# 开发模式（热更新）
 npm run dev
-```
 
-### Type-Check, Compile and Minify for Production
-
-```sh
+# 构建生产版本
 npm run build
+
+# 预览构建结果
+npm run preview
 ```
+----
+
+## 隐私与安全
+文件永远不会离开你的电脑
+
+整个网站是纯前端，没有服务器
+
+- 浏览器只读取文件的元数据（文件名、大小），不读取内容
+
+- 所有处理都在你本地用 FFmpeg 完成
+
+- 生成的 .bat 也只在你电脑上运行
+
+可以断网测试：打开网页、生成脚本、运行 .bat，全程不需要联网
+
+## 常见问题
+### Q：为什么不能直接复制命令？
+
+#### 命令里包含 %%F、%OUT% 等批处理专用变量，直接粘贴到 CMD 会报错。这些变量只有在 .bat 文件里才生效。
+
+### Q：Chrome 提示「可能有害」？
+
+#### 点「保留」即可。Chrome 对所有 .bat 文件都会提示，不是脚本有问题。
+
+### Q：压缩后文件反而变大？
+
+#### 可能原因：源视频已被压缩过、分辨率被放大、音频码率被提升。把分辨率改成「保持原始」，CRF 调到 26-28。
+
+### Q：支持 macOS / Linux 吗？
+
+#### 目前只支持 Windows（生成 .bat）。macOS / Linux 的 .sh 脚本后续考虑。
+
+###### 更多问题见网站内 FAQ。
