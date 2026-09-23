@@ -2,6 +2,7 @@
 import { ref, computed, onUnmounted } from 'vue'
 import type { CutForm, CutSegment } from '@/types/form.ts'
 import ParamsDrawer from "@/components/drawers/ParamsDrawer.vue";
+import {ElMessage} from "element-plus";
 
 
 const form = defineModel<CutForm>({ required: true })
@@ -114,24 +115,53 @@ function setEndFromCurrent() {
 // ============================================================
 // 根据 editingIndex 判断是"添加新片段"还是"保存修改"
 function addOrSaveSegment() {
-  if (!inputStart.value || !inputEnd.value) return
+  if (!inputStart.value || !inputEnd.value) {
+    ElMessage.warning('请填写入点和出点')
+    return
+  }
 
+  const startSec = timeToSeconds(inputStart.value)
+  const endSec = timeToSeconds(inputEnd.value)
+
+  // 1. 时间格式
+  if (isNaN(startSec) || isNaN(endSec)) {
+    ElMessage.error('时间格式不正确，示例：00:01:23.450')
+    return
+  }
+
+  // 2. 出点必须大于入点
+  if (endSec <= startSec) {
+    ElMessage.error('出点必须大于入点')
+    return
+  }
+
+  // 3. 不超出视频时长
+  const duration = mediaEl.value?.duration ?? 0
+  if (duration > 0) {
+    if (startSec < 0 || startSec >= duration) {
+      ElMessage.error(`入点必须在 0 ~ ${secondsToTime(duration)} 之间`)
+      return
+    }
+    if (endSec > duration) {
+      ElMessage.error(`出点不能超过视频时长（${secondsToTime(duration)}）`)
+      return
+    }
+  }
+
+  // ====== 通过校验，继续原有逻辑 ======
   if (editingIndex.value !== null) {
-    // 编辑模式：覆盖原有片段
     form.value.segments[editingIndex.value] = {
       start: inputStart.value,
       end: inputEnd.value,
     }
     editingIndex.value = null
   } else {
-    // 添加模式：追加到列表
     form.value.segments.push({
       start: inputStart.value,
       end: inputEnd.value,
     })
   }
 
-  // 清空输入框，准备下一条
   inputStart.value = ''
   inputEnd.value = ''
 }
@@ -212,16 +242,17 @@ function secondsToTime(s: number): string {
 function timeToSeconds(t: string): number {
   const parts = t.split(':').map(Number)
 
+  // 任意一段不是数字，返回 NaN
+  if (parts.some(isNaN)) return NaN
+
   if (parts.length === 3) {
     const [h = 0, m = 0, s = 0] = parts
     return h * 3600 + m * 60 + s
   }
-
   if (parts.length === 2) {
     const [m = 0, s = 0] = parts
     return m * 60 + s
   }
-
   return parts[0] ?? 0
 }
 
@@ -230,6 +261,24 @@ function segmentDuration(seg: CutSegment): string {
   const dur = timeToSeconds(seg.end) - timeToSeconds(seg.start)
   if (isNaN(dur) || dur < 0) return '—'
   return dur.toFixed(2) + ' 秒'
+}
+
+// 入点失焦校验
+function validateStart() {
+  if (!inputStart.value) return
+  const sec = timeToSeconds(inputStart.value)
+  if (isNaN(sec)) {
+    ElMessage.warning('入点时间格式不正确，示例：00:01:23')
+  }
+}
+
+// 出点失焦校验
+function validateEnd() {
+  if (!inputEnd.value) return
+  const sec = timeToSeconds(inputEnd.value)
+  if (isNaN(sec)) {
+    ElMessage.warning('出点时间格式不正确，示例：00:02:45')
+  }
 }
 
 // ============================================================
@@ -290,14 +339,14 @@ onUnmounted(() => {
     <!-- 用户拖到位置 → 点按钮 → 自动填入时间                           -->
     <!-- ============================================================ -->
     <el-form-item label="入点">
-      <el-input v-model="inputStart" placeholder="00:00:10.000" style="width: 220px;" />
+      <el-input @blur="validateStart" v-model="inputStart" placeholder="00:00:10.000" style="width: 220px;" />
       <el-button size="small" @click="setStartFromCurrent" style="margin-left: 8px;">
         用当前进度
       </el-button>
     </el-form-item>
 
     <el-form-item label="出点">
-      <el-input v-model="inputEnd" placeholder="00:00:25.000" style="width: 220px;" />
+      <el-input @blur="validateEnd" v-model="inputEnd" placeholder="00:00:25.000" style="width: 220px;" />
       <el-button size="small" @click="setEndFromCurrent" style="margin-left: 8px;">
         用当前进度
       </el-button>

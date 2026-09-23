@@ -5,9 +5,15 @@ const drawer = ref(false)
 </script>
 
 <template>
-  <el-button type="primary" @click="drawer = true">查看安装指南</el-button>
+  <el-button type="danger" @click="drawer = true">
+    <p>FFmpeg 安装指南</p>
+    <p><span class="pulse-text">(重要！本网站只是本地ffmpeg的套壳，需要本地有ffmpeg才能运行)</span></p>
+  </el-button>
 
-  <el-drawer v-model="drawer" title="FFmpeg 安装指南" size="50%">
+  <el-drawer v-model="drawer" size="50%">
+    <template #title>
+      <p>FFmpeg 安装指南<span class="float-text">(重要！本网站只是本地ffmpeg的套壳，需要本地有ffmpeg才能运行)</span></p>
+    </template>
     <el-alert
         title="Windows 10/11推荐使用方式一，方便快捷"
         type="info"
