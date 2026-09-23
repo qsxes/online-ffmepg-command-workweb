@@ -245,7 +245,7 @@ onUnmounted(() => {
     <!-- ============================================================ -->
     <!-- 选择文件                                                       -->
     <!-- ============================================================ -->
-    <el-form-item label="选择文件">
+    <el-form-item label="选择文件进行预览">
       <input
           ref="fileInput"
           type="file"
@@ -253,7 +253,7 @@ onUnmounted(() => {
           @change="onFileChange"
           style="display: none"
       />
-      <el-button @click="fileInput?.click()">选择文件</el-button>
+      <el-button @click="fileInput?.click()">选择文件在本地预览</el-button>
       <span v-if="form.fileName" class="filename">{{ form.fileName }}</span>
     </el-form-item>
 
@@ -345,7 +345,11 @@ onUnmounted(() => {
 
     <!-- 空状态提示 -->
     <el-alert v-else type="info" :closable="false" class="empty-alert">
-      还没有片段。拖动视频进度条到位置，点「用当前进度」设置入点和出点，再添加到列表。
+      还没有片段。拖动视频进度条到位置，点
+      <span class="float-text">
+            「用当前进度」
+      </span>
+      设置入点和出点，再添加到列表。
     </el-alert>
 
     <el-divider />

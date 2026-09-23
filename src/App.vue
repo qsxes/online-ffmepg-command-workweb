@@ -8,13 +8,14 @@ import CommandPreview from '@/components/CommandPreview.vue'
 import { buildCompressBatCommand } from '@/utils/BuildCompressBatCommand'
 import { buildCompressBatScript } from '@/utils/BuildCompressBatScript'
 import { buildMergeBatScript } from '@/utils/BuildMergeBatScript'
-import Drawer from "@/components/Drawer.vue";
+import InstallDrawer from "@/components/InstallDrawer.vue";
 import ConvertFormView from "@/components/ConvertForm.vue"
 import {buildConvertBatScript} from "@/utils/BuildConvertBatScript.ts";
 import {buildAudioConvertBatScript} from "@/utils/BuildAudioConvertBatScript.ts";
 import AudioForm from "@/components/AudioForm.vue";
 import {buildCutBatScript} from "@/utils/BuildCutBatScript.ts";
 import CutFormView from "@/components/CutFormView.vue";
+import FAQ_Drawer from "@/components/FAQ_Drawer.vue";
 
 const operation = ref<'compress' | 'merge' |'convert' | 'audio-convert' | 'cut'>('compress')
 
@@ -160,9 +161,17 @@ function stripExt(name: string): string {
   <div class="app">
     <!-- header 独立，不在 grid 里 -->
     <header class="header">
-      <h1>FFmpeg 批量压缩脚本生成器</h1>
-      <p class="privacy">文件不会离开你的电脑。下载 .bat，双击运行，批量压缩当前文件夹的视频。</p>
-      <Drawer></Drawer>
+      <h1>FFmpeg 本地批处理工作流生成器</h1>
+      <p>压缩 · 合并 · 转格式 · 音频转换 · 裁剪</p>
+      <p class="privacy">下载 .bat，双击运行，批量压缩当前文件夹的视频。</p>
+        <el-text class="primary" size="small">
+          <span class="float-text">
+            文件不会离开你的电脑
+          </span>
+        </el-text>
+      <el-divider></el-divider>
+      <InstallDrawer></InstallDrawer>
+      <FAQ_Drawer></FAQ_Drawer>
     </header>
 
     <!-- 只有左右两栏参与 grid -->

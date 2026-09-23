@@ -30,7 +30,11 @@ const drawer = ref(false)
       </li>
     </ol>
     <el-collapse>
-      <el-collapse-item title="❓ winget 下载失败 / 很慢怎么办？" name="manual">
+      <el-collapse-item name="manual">
+        <template #title>
+          <span class="float-emoji">❓</span>
+          <span>使用 winget 下载失败 / 很慢怎么办？</span>
+        </template>
           <ol>
             <p>原因：winget 默认从 GitHub 下载，国内网络可能连不上。</p>
             <p>解决方法：换成国内镜像源</p>
