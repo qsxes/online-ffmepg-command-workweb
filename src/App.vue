@@ -159,81 +159,36 @@ const collapsed = ref(false)
 
 <template>
   <div class="app">
-    <!-- header 独立，不在 grid 里 -->
-
     <header class="header">
       <div class="header-main">
         <div class="header-left">
-          <h1>FFmpeg 本地批处理工作流生成器</h1>
+          <h1>FFmpeg 工坊</h1>
           <p>压缩 · 合并 · 转格式 · 音频转换 · 裁剪</p>
         </div>
         <div class="header-right">
-          <el-button size="small" @click="collapsed = !collapsed">
-            {{ collapsed ? '展开' : '收起' }}
-          </el-button>
+          <el-space>
+            <InstallDrawer />
+            <FAQ_Drawer />
+            <el-button
+                tag="a"
+                href="https://github.com/qsxes/online-ffmepg-command-workweb"
+                target="_blank"
+                title="GitHub 仓库"
+            >
+              <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+              </svg>
+            </el-button>
+          </el-space>
         </div>
       </div>
-      <div v-show="!collapsed" class="header-details">
-        <p class="privacy">
-          <el-text class="primary" size="small">
-          <span class="float-text">
-            文件不会离开你的电脑，下载 .bat，双击运行，批量压缩当前文件夹的视频。
-          </span>
-          </el-text>
-        </p>
-
-        <el-divider></el-divider>
-        <el-space>
-          <InstallDrawer></InstallDrawer>
-          <FAQ_Drawer></FAQ_Drawer>
-          <el-button
-              tag="a"
-              href="https://github.com/qsxes/online-ffmepg-command-workweb"
-              target="_blank"
-              title="GitHub 仓库"
-          >
-            <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor">
-              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-            </svg>
-            <p>本项目开源仓库地址</p>
-          </el-button>
-        </el-space>
-
-      </div>
-
     </header>
 
-    <!-- 只有左右两栏参与 grid -->
-    <main class="main">
-      <section class="col">
-        <el-tabs v-model="operation">
-          <el-tab-pane label="批量压缩" name="compress">
-            <CompressFormView v-model="compressForm" />
-          </el-tab-pane>
-          <el-tab-pane label="按文件名合并" name="merge">
-            <MergeFormView v-model="mergeForm" />
-          </el-tab-pane>
-          <el-tab-pane label="视频批量转格式" name="convert">
-            <ConvertFormView v-model="convertForm"></ConvertFormView>
-          </el-tab-pane>
-          <el-tab-pane label="音频批量转格式" name="audio-convert">
-            <AudioForm v-model="audioConvertForm"></AudioForm>
-          </el-tab-pane>
-          <el-tab-pane label="音频/视频剪辑" name="cut">
-            <CutFormView v-model="cutForm"></CutFormView>
-          </el-tab-pane>
-        </el-tabs>
-      </section>
+    <RouterView  style="flex: 1" class="router-view" />
 
-      <section class="col col-right">
-        <div class="actions-area">
-          <ScriptActions :script="script" :fileName="batFilename" />
-        </div>
-        <div class="preview-area">
-          <CommandPreview :command="command" :script="script" />
-        </div>
-      </section>
-    </main>
+    <footer class="footer">
+      <el-text size="small" class="primary">🔒 文件不会离开你的电脑</el-text>
+    </footer>
   </div>
 </template>
 

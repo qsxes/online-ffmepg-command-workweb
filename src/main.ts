@@ -6,6 +6,7 @@ import {buildCompressBatCommand} from "@/utils/BuildCompressBatCommand.ts";
 import {buildBatScript} from "@/utils/BuildeBatScript.ts";
 import ElPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import router from "@/router";
 
 
 
@@ -31,4 +32,5 @@ import 'element-plus/dist/index.css'
 
 const appV = createApp(App)
 appV.use(ElPlus)
+appV.use(router)
 appV.mount('#app')
