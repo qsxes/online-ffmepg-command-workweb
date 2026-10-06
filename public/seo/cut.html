@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>视频/音频裁剪 · FFmpeg 工坊</title>
+    <meta name="description" content="本地预览，多片段裁剪，生成可双击运行的 .bat 脚本。支持快速裁剪和精确裁剪。">
+</head>
+<body>
+<h1>视频 / 音频裁剪</h1>
+<p>在浏览器里本地预览，选起止时间，支持多片段管理，生成可双击运行的 .bat 脚本。</p>
+
+<h2>支持的格式</h2>
+<ul>
+    <li>视频：mp4 / mkv / mov / avi / webm / ts</li>
+    <li>音频：mp3 / wav / m4a / flac / aac / ogg</li>
+</ul>
+
+<h2>裁剪模式</h2>
+<ul>
+    <li><strong>快速裁剪</strong>：不重新编码，秒级完成。起始点可能有 1-2 秒偏移</li>
+    <li><strong>精确裁剪</strong>：重新编码，帧级精确，速度较慢</li>
+</ul>
+
+<h2>使用步骤</h2>
+<ol>
+    <li>安装 FFmpeg：<code>winget install ffmpeg</code></li>
+    <li>打开工具页，选文件，本地预览，设置入点和出点</li>
+    <li>添加到片段列表，可添加多段，下载 .bat</li>
+    <li>把 .bat 放到文件所在文件夹，双击运行</li>
+</ol>
+
+<h2>特点</h2>
+<ul>
+    <li>浏览器本地预览，文件不上传</li>
+    <li>支持多片段，一次生成多个裁剪结果</li>
+    <li>免费，开源</li>
+</ul>
+
+<p><a href="/online-ffmepg-command-workweb/cut">→ 打开裁剪工具</a></p>
+</body>
+</html>

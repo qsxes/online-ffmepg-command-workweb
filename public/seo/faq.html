@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>常见问题 · FFmpeg 工坊</title>
+    <meta name="description" content="FFmpeg 工坊的常见问题解答：安装、使用、路径、错误排查。">
+</head>
+<body>
+<h1>常见问题</h1>
+
+<h2>FFmpeg 怎么安装？</h2>
+<p>Windows 10/11 打开 PowerShell（管理员），运行 <code>winget install ffmpeg</code>。安装后关闭所有 CMD 窗口，重新打开，输入 <code>ffmpeg -version</code> 验证。</p>
+<p>如果 winget 下载失败，可以用中科大镜像源：</p>
+<pre>winget source remove winget
+winget source add winget https://mirrors.ustc.edu.cn/winget-source --trust-level trusted
+winget install ffmpeg</pre>
+
+<h2>.bat 文件应该放哪里？</h2>
+<p>放到你要处理的视频所在的文件夹，和视频文件放在一起。双击运行后，脚本会处理当前文件夹里的所有匹配文件，输出到子文件夹。</p>
+
+<h2>为什么不能直接复制命令？</h2>
+<p>命令里包含 <code>%%F</code>、<code>%OUT%</code> 等批处理专用变量，直接粘贴到 CMD 会报错。这些变量只有在 .bat 文件里才生效。</p>
+
+<h2>双击 .bat 闪退怎么办？</h2>
+<p>最常见原因是没装 FFmpeg。右键 .bat → 在终端中打开，看完整输出。</p>
+
+<h2>Chrome 提示「可能有害」怎么办？</h2>
+<p>点「保留」即可下载。Chrome 对所有 .bat 文件都会提示，不是脚本有问题。</p>
+
+<h2>输出文件在哪？</h2>
+<p>在 .bat 同目录下的子文件夹里：压缩 → <code>finished/</code>，合并 → <code>merged/</code>，转格式 → <code>converted/</code>，裁剪 → <code>cut/</code>。</p>
+
+<h2>想重新处理怎么办？</h2>
+<p>关闭「跳过已存在」，或改文件名后缀，生成新文件名，旧结果保留。</p>
+
+<h2>文件会上传吗？</h2>
+<p>不会。整个网站是纯前端，没有服务器。浏览器只读取文件名、大小等元数据，不读取内容。所有处理在本地用 FFmpeg 完成。</p>
+
+<h2>支持 macOS / Linux 吗？</h2>
+<p>目前只支持 Windows（生成 .bat 脚本）。macOS / Linux 的 .sh 脚本后续考虑。</p>
+
+<p><a href="/online-ffmepg-command-workweb/faq">→ 查看完整 FAQ</a></p>
+</body>
+</html>

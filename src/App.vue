@@ -188,6 +188,13 @@ const collapsed = ref(false)
 
     <footer class="footer">
       <el-text size="small" class="primary">🔒 文件不会离开你的电脑</el-text>
+      <div class="seo-links">
+        <a href="/online-ffmepg-command-workweb/seo/compress.html">批量压缩</a>
+        <a href="/online-ffmepg-command-workweb/seo/merge.html">视频合并</a>
+        <a href="/online-ffmepg-command-workweb/seo/convert.html">转格式</a>
+        <a href="/online-ffmepg-command-workweb/seo/audio-convert.html">音频转换</a>
+        <a href="/online-ffmepg-command-workweb/seo/cut.html">视频裁剪</a>
+      </div>
     </footer>
   </div>
 </template>
@@ -296,5 +303,33 @@ const collapsed = ref(false)
 
 .header-details {
   margin-top: 12px;
+}
+
+.footer {
+  flex-shrink: 0;
+  padding: 8px 32px;
+  border-top: 1px solid #e4e7ed;
+  text-align: center;
+  background: #fafafa;
+  font-size: 12px;
+}
+
+.seo-links {
+  margin-top: 4px;
+  color: #c0c4cc;
+}
+
+.seo-links a {
+  color: #909399;
+  text-decoration: none;
+  margin: 0 4px;
+}
+
+.seo-links a:hover {
+  color: #409eff;
+}
+
+.seo-links span {
+  color: #c0c4cc;
 }
 </style>

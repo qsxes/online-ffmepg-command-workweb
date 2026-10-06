@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>按文件名合并视频 · FFmpeg 工坊</title>
+    <meta name="description" content="按文件名自然顺序合并视频/音频，一键拼接分段录像。生成可双击运行的 .bat 脚本。">
+</head>
+<body>
+<h1>按文件名合并视频 / 音频</h1>
+<p>按文件名的自然顺序（1 → 2 → 10）合并当前文件夹里的视频或音频文件。</p>
+
+<h2>支持的格式</h2>
+<ul>
+    <li>输入：mp4 / mp3 / ts / mkv</li>
+    <li>输出：合并为单个文件，扩展名与原格式一致</li>
+</ul>
+
+<h2>合并模式</h2>
+<ul>
+    <li><strong>快速合并</strong>：不重新编码，秒级完成。要求所有文件的编码、分辨率、帧率一致</li>
+    <li><strong>重新编码</strong>：兼容性最好，任何视频都能合，速度较慢</li>
+</ul>
+
+<h2>使用步骤</h2>
+<ol>
+    <li>安装 FFmpeg：<code>winget install ffmpeg</code></li>
+    <li>打开工具页，选输入格式和合并模式，下载 .bat</li>
+    <li>把 .bat 放到视频文件夹，双击运行</li>
+</ol>
+
+<h2>特点</h2>
+<ul>
+    <li>文件不上传，本地处理</li>
+    <li>自然排序，正确处理数字文件名</li>
+    <li>合并失败时脚本会提示改用重新编码</li>
+    <li>免费，开源</li>
+</ul>
+
+<p><a href="/online-ffmepg-command-workweb/merge">→ 打开合并工具</a></p>
+</body>
+</html>
