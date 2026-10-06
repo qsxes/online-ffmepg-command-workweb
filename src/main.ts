@@ -30,6 +30,14 @@ import router from "@/router";
 
 //测试脚本生成
 
+//处理404页面带来的重定向参数
+const params = new URLSearchParams(window.location.search)
+const redirect = params.get('redirect')
+if (redirect) {
+    window.history.replaceState(null, '',
+        '/online-ffmepg-command-workweb' + redirect
+    )
+}
 const appV = createApp(App)
 appV.use(ElPlus)
 appV.use(router)
