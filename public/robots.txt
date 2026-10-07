@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://qsxes.github.io/online-ffmepg-command-workweb/sitemap.xml
+Sitemap: https://6767tool.devs.li/sitemap.xml

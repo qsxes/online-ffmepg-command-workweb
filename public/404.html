@@ -5,7 +5,7 @@
     <script>
         //把 404 请求重定向到 SPA 入口，让 vue-router 处理路由
         const path = window.location.pathname;
-        const base = '/online-ffmepg-command-workweb';
+        const base = '';
         const subPath = path.replace(base, '') || '/';
         window.location.replace(base + '/?redirect=' + encodeURIComponent(subPath));
     </script>

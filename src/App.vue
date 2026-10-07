@@ -189,11 +189,11 @@ const collapsed = ref(false)
     <footer class="footer">
       <el-text size="small" class="primary">🔒 文件不会离开你的电脑</el-text>
       <div class="seo-links">
-        <a href="/online-ffmepg-command-workweb/seo/compress.html">批量压缩</a>
-        <a href="/online-ffmepg-command-workweb/seo/merge.html">视频合并</a>
-        <a href="/online-ffmepg-command-workweb/seo/convert.html">转格式</a>
-        <a href="/online-ffmepg-command-workweb/seo/audio-convert.html">音频转换</a>
-        <a href="/online-ffmepg-command-workweb/seo/cut.html">视频裁剪</a>
+        <a href="/seo/compress.html">批量压缩</a>
+        <a href="/seo/merge.html">视频合并</a>
+        <a href="/seo/convert.html">转格式</a>
+        <a href="/seo/audio-convert.html">音频转换</a>
+        <a href="/seo/cut.html">视频裁剪</a>
       </div>
     </footer>
   </div>

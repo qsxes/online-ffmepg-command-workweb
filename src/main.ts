@@ -34,9 +34,10 @@ import router from "@/router";
 const params = new URLSearchParams(window.location.search)
 const redirect = params.get('redirect')
 if (redirect) {
-    window.history.replaceState(null, '',
-        '/online-ffmepg-command-workweb' + redirect
-    )
+    // window.history.replaceState(null, '',
+    //     '/online-ffmepg-command-workweb' + redirect
+    // )
+    window.history.replaceState(null, '', redirect)
 }
 const appV = createApp(App)
 appV.use(ElPlus)
